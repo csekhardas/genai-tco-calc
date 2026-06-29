@@ -86,28 +86,18 @@ html, body, [class*="css"], .stApp {
 
 .block-container { max-width: 1380px; padding-top: 1.2rem; padding-bottom: 3rem; }
 
-/* ── Top bar ── */
-.gc-topbar {
-    height: 64px; background: #FFFFFF; border: 1px solid #DADCE0;
-    border-radius: 16px; padding: 0 28px;
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 20px; box-shadow: 0 1px 3px rgba(60,64,67,0.10);
-}
+/* ── Top bar (functional columns-based) ── */
 .gc-brand { display:flex; align-items:center; gap:10px;
     font-family:'Google Sans','Roboto',Arial,sans-serif;
-    font-size:19px; font-weight:700; color:#202124; }
+    font-size:19px; font-weight:700; color:#202124; padding:14px 0; }
 .gc-cloud-icon { font-size:26px; }
-.gc-nav { display:flex; gap:8px; }
-.gc-nav-item {
-    padding: 8px 18px; border-radius: 8px; font-size:14px; font-weight:500;
-    color:#5F6368; cursor:default;
-}
 
-/* ── Section divider label ── */
-.gc-tab-label {
-    font-family:'Google Sans','Roboto',Arial,sans-serif;
-    font-size:11px; font-weight:700; color:#5F6368; letter-spacing:1.5px;
-    text-transform:uppercase; margin: 4px 0 8px;
+/* Style the topbar columns row as a white card */
+section.main .block-container > div:first-child [data-testid="stHorizontalBlock"] {
+    background: #FFFFFF; border: 1px solid #DADCE0;
+    border-radius: 16px; padding: 0 12px;
+    box-shadow: 0 1px 3px rgba(60,64,67,0.10);
+    margin-bottom: 20px; align-items: center;
 }
 
 /* ── Hero ── */
@@ -322,13 +312,21 @@ div[data-baseweb="tab-panel"] { padding-top: 4px !important; }
 }
 div[data-baseweb="select"] > div { border-radius: 8px !important; border: 1px solid #DADCE0 !important; }
 
+/* Default (secondary) buttons = ghost nav-style */
 .stButton > button {
-    background: #1A73E8 !important; color: #FFFFFF !important;
-    border: none !important; border-radius: 8px !important;
-    font-weight: 700 !important; padding: 0.6rem 1.2rem !important;
-    font-size: 14px !important; transition: background 0.15s !important;
+    background: transparent !important; color: #5F6368 !important;
+    border: none !important; border-radius: 8px !important; box-shadow: none !important;
+    font-weight: 500 !important; font-size: 14px !important;
+    transition: background 0.15s !important;
 }
-.stButton > button:hover { background: #174EA6 !important; }
+.stButton > button:hover { background: #F8FAFD !important; color: #202124 !important; }
+/* Primary buttons = blue filled (active nav or explicit action) */
+.stButton > button[kind="primary"] {
+    background: #1A73E8 !important; color: #FFFFFF !important;
+    border: none !important; font-weight: 700 !important;
+    padding: 0.6rem 1.2rem !important;
+}
+.stButton > button[kind="primary"]:hover { background: #174EA6 !important; }
 
 .stDownloadButton > button {
     background: #FFFFFF !important; color: #1A73E8 !important;
@@ -473,36 +471,42 @@ with st.sidebar:
     </div>""", unsafe_allow_html=True)
 
 
-# ─── Top bar ─────────────────────────────────────────────────────────────────
-st.markdown("""
-<div class="gc-topbar">
+# ─── Session state for topbar navigation ─────────────────────────────────────
+if "active_section" not in st.session_state:
+    st.session_state.active_section = None
+
+# ─── Top bar (functional) ────────────────────────────────────────────────────
+tb_brand, tb_n1, tb_n2, tb_n3, tb_n4, tb_pills = st.columns([4, 1, 1.2, 1.5, 1, 1.8])
+with tb_brand:
+    st.markdown("""
     <div class="gc-brand">
         <span class="gc-cloud-icon">☁️</span>
         <span>GenAI TCO Calculator</span>
-    </div>
-    <div class="gc-nav">
-        <span class="gc-nav-item">Overview</span>
-        <span class="gc-nav-item">Scenarios</span>
-        <span class="gc-nav-item">Optimization</span>
-        <span class="gc-nav-item">Reports</span>
-    </div>
-</div>""", unsafe_allow_html=True)
+    </div>""", unsafe_allow_html=True)
 
+for (label, key), col in zip(
+    [("Overview","overview"),("Scenarios","scenarios"),("Optimization","optimization"),("Reports","reports")],
+    [tb_n1, tb_n2, tb_n3, tb_n4]
+):
+    with col:
+        active = st.session_state.active_section == key
+        if st.button(label, key=f"nav_{key}", use_container_width=True,
+                     type="primary" if active else "secondary"):
+            st.session_state.active_section = None if active else key
+            st.rerun()
+
+with tb_pills:
+    st.markdown("""
+    <div style="display:flex;gap:6px;align-items:center;padding:14px 0;justify-content:flex-end">
+        <span style="background:#E8F0FE;color:#174EA6;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;">v1.0</span>
+        <span style="background:#E6F4EA;color:#137333;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;">Multi-Cloud</span>
+    </div>""", unsafe_allow_html=True)
+
+# Pre-allocated content panel — filled after tco is computed (below)
+content_area = st.empty()
 
 # ════════════════════════════════════════════════════════════════════════════
-# ROW 1 — 4 CONTENT TABS  (Overview · Scenarios · Optimization · Reports)
-# ════════════════════════════════════════════════════════════════════════════
-st.markdown('<div class="gc-tab-label">Knowledge Base</div>', unsafe_allow_html=True)
-tab_ov, tab_sc_info, tab_opt_info, tab_rep_info = st.tabs([
-    "🏠 Overview",
-    "🔄 Scenarios",
-    "⚡ Optimization",
-    "📋 Reports",
-])
-
-st.markdown('<div class="gc-tab-label" style="margin-top:20px">TCO Calculator</div>', unsafe_allow_html=True)
-# ════════════════════════════════════════════════════════════════════════════
-# ROW 2 — 6 CALCULATOR TABS  (original set, unchanged)
+# 6 CALCULATOR TABS  (original set, unchanged)
 # ════════════════════════════════════════════════════════════════════════════
 tab_dashboard, tab_cost, tab_scenario, tab_gpu, tab_roi, tab_export = st.tabs([
     "📊 Executive Dashboard",
@@ -643,9 +647,9 @@ with tab_cost:
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# CONTENT TAB 1 — Overview
+# TOPBAR CONTENT SECTIONS — rendered into content_area after tco is computed
 # ────────────────────────────────────────────────────────────────────────────
-with tab_ov:
+def _section_overview():
     # Hero
     st.markdown(f"""
     <div class="gc-hero">
@@ -806,10 +810,7 @@ with tab_ov:
         st.plotly_chart(fig_tco, use_container_width=True)
 
 
-# ────────────────────────────────────────────────────────────────────────────
-# CONTENT TAB 2 — Scenarios
-# ────────────────────────────────────────────────────────────────────────────
-with tab_sc_info:
+def _section_scenarios():
     section("Scenarios",
             "Compare GenAI deployment patterns before committing investment. Different architectures produce very different cost and ROI profiles.")
 
@@ -945,10 +946,7 @@ with tab_sc_info:
     </div>""", unsafe_allow_html=True)
 
 
-# ────────────────────────────────────────────────────────────────────────────
-# CONTENT TAB 3 — Optimization
-# ────────────────────────────────────────────────────────────────────────────
-with tab_opt_info:
+def _section_optimization():
     section("Optimization",
             "Reduce GenAI cost without reducing business value. Apply these six levers to lower token waste, improve model selection, and maximize value per request.")
 
@@ -1043,10 +1041,7 @@ with tab_opt_info:
     st.dataframe(pd.DataFrame(matrix_data), use_container_width=True, hide_index=True)
 
 
-# ────────────────────────────────────────────────────────────────────────────
-# CONTENT TAB 4 — Reports
-# ────────────────────────────────────────────────────────────────────────────
-with tab_rep_info:
+def _section_reports():
     section("Reports",
             "Generate executive-ready GenAI TCO and ROI reports. Use the ROI & Payback and Docs & Export calculator tabs to produce and download these reports.")
 
@@ -1133,6 +1128,17 @@ with tab_rep_info:
         st.markdown(info_card("📋", "Assumptions Reference",
             "Full formula reference, GPU pricing table, LLM API pricing table, and architecture decision guide. Available in the Docs & Export calculator tab."), unsafe_allow_html=True)
 
+
+# ─── Render active topbar section into the placeholder ───────────────────────
+if st.session_state.active_section:
+    with content_area.container():
+        st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+        _sec = st.session_state.active_section
+        if _sec == "overview":        _section_overview()
+        elif _sec == "scenarios":     _section_scenarios()
+        elif _sec == "optimization":  _section_optimization()
+        elif _sec == "reports":       _section_reports()
+        st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
 
 # ────────────────────────────────────────────────────────────────────────────
 # CALCULATOR TAB 1 — Executive Dashboard
