@@ -26,7 +26,6 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ─── Google Cloud design tokens ──────────────────────────────────────────────
 GC = dict(
     blue       = "#1A73E8",
     blue_dark  = "#174EA6",
@@ -90,7 +89,7 @@ html, body, [class*="css"], .stApp {
 /* ── Top bar ── */
 .gc-topbar {
     height: 64px; background: #FFFFFF; border: 1px solid #DADCE0;
-    border-radius: 16px; padding: 0 24px;
+    border-radius: 16px; padding: 0 28px;
     display: flex; align-items: center; justify-content: space-between;
     margin-bottom: 20px; box-shadow: 0 1px 3px rgba(60,64,67,0.10);
 }
@@ -98,9 +97,18 @@ html, body, [class*="css"], .stApp {
     font-family:'Google Sans','Roboto',Arial,sans-serif;
     font-size:19px; font-weight:700; color:#202124; }
 .gc-cloud-icon { font-size:26px; }
-.gc-nav { display:flex; gap:28px; color:#5F6368; font-size:14px; font-weight:500; }
-.gc-pill { background:#E8F0FE; color:#174EA6; padding:7px 14px;
-    border-radius:999px; font-size:12px; font-weight:700; letter-spacing:0.3px; }
+.gc-nav { display:flex; gap:8px; }
+.gc-nav-item {
+    padding: 8px 18px; border-radius: 8px; font-size:14px; font-weight:500;
+    color:#5F6368; cursor:default;
+}
+
+/* ── Section divider label ── */
+.gc-tab-label {
+    font-family:'Google Sans','Roboto',Arial,sans-serif;
+    font-size:11px; font-weight:700; color:#5F6368; letter-spacing:1.5px;
+    text-transform:uppercase; margin: 4px 0 8px;
+}
 
 /* ── Hero ── */
 .gc-hero {
@@ -122,8 +130,8 @@ html, body, [class*="css"], .stApp {
 }
 .gc-hero h1 {
     font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
-    font-size: 40px; line-height: 1.12; letter-spacing: -0.01em;
-    color: #202124; margin: 0 0 14px; max-width: 740px;
+    font-size: 38px; line-height: 1.12; letter-spacing: -0.01em;
+    color: #202124; margin: 0 0 14px; max-width: 760px;
 }
 .gc-hero p { color: #5F6368; font-size: 17px; line-height: 1.65; max-width: 700px; margin-bottom: 26px; }
 .gc-cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
@@ -137,7 +145,6 @@ html, body, [class*="css"], .stApp {
     padding: 10px 22px; border-radius: 8px; font-weight: 700; font-size: 14px;
     border: 1px solid #DADCE0; text-decoration: none; cursor: pointer;
 }
-.gc-btn-secondary:hover { background: #F8FAFD; }
 
 /* ── KPI Cards ── */
 .gc-card {
@@ -157,6 +164,69 @@ html, body, [class*="css"], .stApp {
 .gc-kpi-value { font-family:'Google Sans','Roboto',Arial,sans-serif;
     color: #202124; font-size: 32px; font-weight: 700; line-height: 1; margin-bottom: 8px; }
 .gc-kpi-sub { color: #5F6368; font-size: 13px; line-height: 1.4; }
+
+/* ── Info cards (for TCO pillars, challenges, etc.) ── */
+.gc-info-card {
+    background: #FFFFFF; border: 1px solid #DADCE0; border-radius: 14px;
+    padding: 20px 20px 16px; height: 100%;
+    box-shadow: 0 1px 2px rgba(60,64,67,0.06);
+}
+.gc-info-card:hover { box-shadow: 0 3px 10px rgba(60,64,67,0.14); }
+.gc-info-icon  { font-size: 26px; margin-bottom: 10px; }
+.gc-info-title { font-family:'Google Sans','Roboto',Arial,sans-serif;
+    font-size: 15px; font-weight: 700; color: #202124; margin-bottom: 6px; }
+.gc-info-body  { font-size: 13px; color: #5F6368; line-height: 1.6; }
+
+/* ── Challenge cards ── */
+.gc-challenge {
+    background: #FFFFFF; border: 1px solid #DADCE0; border-left: 4px solid #EA4335;
+    border-radius: 12px; padding: 14px 18px; margin: 6px 0;
+    box-shadow: 0 1px 2px rgba(60,64,67,0.06);
+}
+.gc-challenge-title { font-weight: 700; color: #202124; font-size: 14px; margin-bottom: 4px; }
+.gc-challenge-body  { color: #5F6368; font-size: 13px; line-height: 1.55; }
+
+/* ── Scenario info cards ── */
+.gc-scenario-card {
+    background: #FFFFFF; border: 1px solid #DADCE0; border-radius: 16px;
+    padding: 24px; height: 100%;
+    box-shadow: 0 1px 2px rgba(60,64,67,0.08);
+}
+.gc-scenario-card:hover { box-shadow: 0 4px 14px rgba(60,64,67,0.14); }
+.gc-scenario-badge {
+    display: inline-block; padding: 4px 12px; border-radius: 999px;
+    font-size: 11px; font-weight: 700; margin-bottom: 12px;
+}
+.gc-scenario-title { font-family:'Google Sans','Roboto',Arial,sans-serif;
+    font-size: 17px; font-weight: 700; color: #202124; margin-bottom: 8px; }
+.gc-scenario-desc { font-size: 13px; color: #5F6368; line-height: 1.6; margin-bottom: 14px; }
+.gc-tag-row { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+.gc-tag {
+    background: #F1F3F4; color: #5F6368; padding: 3px 10px;
+    border-radius: 999px; font-size: 11px; font-weight: 500;
+}
+
+/* ── Optimization technique cards ── */
+.gc-opt-card {
+    background: #FFFFFF; border: 1px solid #DADCE0; border-radius: 14px;
+    padding: 20px; height: 100%;
+    box-shadow: 0 1px 2px rgba(60,64,67,0.06);
+}
+.gc-opt-card:hover { box-shadow: 0 3px 10px rgba(60,64,67,0.14); }
+.gc-opt-title { font-family:'Google Sans','Roboto',Arial,sans-serif;
+    font-size: 15px; font-weight: 700; color: #202124; margin-bottom: 6px; }
+.gc-opt-body  { font-size: 13px; color: #5F6368; line-height: 1.6; }
+.gc-opt-list  { padding-left: 16px; margin: 8px 0 0; }
+.gc-opt-list li { font-size: 12px; color: #5F6368; margin-bottom: 3px; }
+
+/* ── Callout box ── */
+.gc-callout {
+    background: #E8F0FE; border: 1px solid #C5D9F7; border-radius: 14px;
+    padding: 20px 24px; margin: 16px 0;
+}
+.gc-callout-title { font-family:'Google Sans','Roboto',Arial,sans-serif;
+    font-size: 16px; font-weight: 700; color: #174EA6; margin-bottom: 6px; }
+.gc-callout-body { font-size: 14px; color: #174EA6; line-height: 1.65; }
 
 /* ── Tabs ── */
 div[data-baseweb="tab-list"] {
@@ -184,8 +254,6 @@ div[data-baseweb="tab-panel"] { padding-top: 4px !important; }
     margin: 4px 0 6px; line-height: 1.3;
 }
 .gc-section-sub { color: #5F6368; font-size: 14px; margin-bottom: 20px; line-height: 1.6; }
-
-/* ── Sub-section headers ── */
 .gc-sub-hdr {
     font-size: 13px; font-weight: 700; color: #5F6368; letter-spacing: 1px;
     text-transform: uppercase; padding: 18px 0 10px;
@@ -197,7 +265,7 @@ div[data-baseweb="tab-panel"] { padding-top: 4px !important; }
     background: linear-gradient(180deg, #1A73E8, #34A853); border-radius: 2px;
 }
 
-/* ── Recommendation chips ── */
+/* ── Recommendations ── */
 .gc-rec {
     background: #FFFFFF; border: 1px solid #DADCE0; border-left: 4px solid #1A73E8;
     border-radius: 12px; padding: 14px 18px; margin: 8px 0;
@@ -207,7 +275,24 @@ div[data-baseweb="tab-panel"] { padding-top: 4px !important; }
 .gc-rec-title { font-weight: 700; color: #202124; font-size: 14px; margin-bottom: 4px; }
 .gc-rec-body  { color: #5F6368; font-size: 13px; line-height: 1.6; }
 
-/* ── Streamlit native overrides (light) ── */
+/* ── Report section cards ── */
+.gc-report-card {
+    background: #FFFFFF; border: 1px solid #DADCE0; border-radius: 14px;
+    padding: 20px; height: 100%;
+    box-shadow: 0 1px 2px rgba(60,64,67,0.06);
+}
+.gc-report-card:hover { box-shadow: 0 3px 10px rgba(60,64,67,0.14); }
+.gc-report-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #E8F0FE; color: #174EA6; font-weight: 700; font-size: 13px;
+    margin-bottom: 10px;
+}
+.gc-report-title { font-family:'Google Sans','Roboto',Arial,sans-serif;
+    font-size: 15px; font-weight: 700; color: #202124; margin-bottom: 6px; }
+.gc-report-body  { font-size: 13px; color: #5F6368; line-height: 1.6; }
+
+/* ── Streamlit overrides ── */
 [data-testid="stSidebar"] {
     background: #FFFFFF !important;
     border-right: 1px solid #DADCE0 !important;
@@ -272,11 +357,8 @@ div[data-baseweb="notification"] * { color: #174EA6 !important; }
     overflow: hidden !important;
 }
 hr { border-color: #F1F3F4 !important; }
-
 [data-testid="stSlider"] > div > div > div > div { background: #1A73E8 !important; }
-
 header[data-testid="stHeader"] { background: transparent !important; }
-
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: #F8FAFD; }
 ::-webkit-scrollbar-thumb { background: #DADCE0; border-radius: 3px; }
@@ -304,12 +386,46 @@ def sub_hdr(label):
     st.markdown(f'<div class="gc-sub-hdr">{label}</div>', unsafe_allow_html=True)
 
 def rec(icon, title, body, color="#1A73E8"):
-    border = f"border-left-color:{color}"
     st.markdown(f"""
-    <div class="gc-rec" style="{border}">
+    <div class="gc-rec" style="border-left-color:{color}">
         <div class="gc-rec-title">{icon} {title}</div>
         <div class="gc-rec-body">{body}</div>
     </div>""", unsafe_allow_html=True)
+
+def info_card(icon, title, body):
+    return f"""
+    <div class="gc-info-card">
+        <div class="gc-info-icon">{icon}</div>
+        <div class="gc-info-title">{title}</div>
+        <div class="gc-info-body">{body}</div>
+    </div>"""
+
+def challenge_card(icon, title, body):
+    return f"""
+    <div class="gc-challenge">
+        <div class="gc-challenge-title">{icon} {title}</div>
+        <div class="gc-challenge-body">{body}</div>
+    </div>"""
+
+def opt_card(icon, title, body, bullets):
+    items = "".join(f"<li>{b}</li>" for b in bullets)
+    return f"""
+    <div class="gc-opt-card">
+        <div style="font-size:22px;margin-bottom:8px">{icon}</div>
+        <div class="gc-opt-title">{title}</div>
+        <div class="gc-opt-body">{body}</div>
+        <ul class="gc-opt-list">{items}</ul>
+    </div>"""
+
+def report_card(num, title, body, includes):
+    items = "".join(f"<li>{i}</li>" for i in includes)
+    return f"""
+    <div class="gc-report-card">
+        <div class="gc-report-num">{num}</div>
+        <div class="gc-report-title">{title}</div>
+        <div class="gc-report-body">{body}</div>
+        <ul class="gc-opt-list" style="margin-top:10px">{items}</ul>
+    </div>"""
 
 
 # ─── Sidebar ─────────────────────────────────────────────────────────────────
@@ -358,23 +474,36 @@ with st.sidebar:
 
 
 # ─── Top bar ─────────────────────────────────────────────────────────────────
-st.markdown(f"""
+st.markdown("""
 <div class="gc-topbar">
     <div class="gc-brand">
         <span class="gc-cloud-icon">☁️</span>
         <span>GenAI TCO Calculator</span>
     </div>
     <div class="gc-nav">
-        <span>Overview</span>
-        <span>Scenarios</span>
-        <span>Optimization</span>
-        <span>Reports</span>
+        <span class="gc-nav-item">Overview</span>
+        <span class="gc-nav-item">Scenarios</span>
+        <span class="gc-nav-item">Optimization</span>
+        <span class="gc-nav-item">Reports</span>
     </div>
-    <div class="gc-pill">Google Cloud Style</div>
 </div>""", unsafe_allow_html=True)
 
 
-# ─── Tabs ────────────────────────────────────────────────────────────────────
+# ════════════════════════════════════════════════════════════════════════════
+# ROW 1 — 4 CONTENT TABS  (Overview · Scenarios · Optimization · Reports)
+# ════════════════════════════════════════════════════════════════════════════
+st.markdown('<div class="gc-tab-label">Knowledge Base</div>', unsafe_allow_html=True)
+tab_ov, tab_sc_info, tab_opt_info, tab_rep_info = st.tabs([
+    "🏠 Overview",
+    "🔄 Scenarios",
+    "⚡ Optimization",
+    "📋 Reports",
+])
+
+st.markdown('<div class="gc-tab-label" style="margin-top:20px">TCO Calculator</div>', unsafe_allow_html=True)
+# ════════════════════════════════════════════════════════════════════════════
+# ROW 2 — 6 CALCULATOR TABS  (original set, unchanged)
+# ════════════════════════════════════════════════════════════════════════════
 tab_dashboard, tab_cost, tab_scenario, tab_gpu, tab_roi, tab_export = st.tabs([
     "📊 Executive Dashboard",
     "💰 Cost Components",
@@ -385,9 +514,9 @@ tab_dashboard, tab_cost, tab_scenario, tab_gpu, tab_roi, tab_export = st.tabs([
 ])
 
 
-# ════════════════════════════════════════════════════════════════════════════
-# TAB 2 — Cost Components  (compute first — feeds all other tabs)
-# ════════════════════════════════════════════════════════════════════════════
+# ────────────────────────────────────────────────────────────────────────────
+# CALCULATOR TAB 2 — Cost Components  (compute FIRST — feeds all other tabs)
+# ────────────────────────────────────────────────────────────────────────────
 with tab_cost:
     section("Cost Components",
             "Break down GenAI cost by infrastructure, model tokens, data pipeline, labor, and operations.")
@@ -492,32 +621,523 @@ with tab_cost:
     with col_a:
         with st.expander("Infrastructure Detail"):
             st.table(pd.DataFrame([
-                ("GPU Compute",   fmt(infra["gpu_compute"])),
-                ("Storage",       fmt(infra["storage"])),
-                ("Networking",    fmt(infra["networking"])),
-                ("Cloud Overhead",fmt(infra["cloud_overhead"])),
+                ("GPU Compute",    fmt(infra["gpu_compute"])),
+                ("Storage",        fmt(infra["storage"])),
+                ("Networking",     fmt(infra["networking"])),
+                ("Cloud Overhead", fmt(infra["cloud_overhead"])),
             ], columns=["Component","Monthly"]).set_index("Component"))
     with col_b:
         with st.expander("Data Pipeline Detail"):
             st.table(pd.DataFrame([
-                ("Ingestion",        fmt(pipeline["ingestion"])),
-                ("ETL / Transform",  fmt(pipeline["transformation"])),
-                ("Vector DB Storage",fmt(pipeline["vector_db_storage"])),
-                ("Vector DB Queries",fmt(pipeline["vector_db_queries"])),
-                ("Raw Storage",      fmt(pipeline["raw_storage"])),
+                ("Ingestion",         fmt(pipeline["ingestion"])),
+                ("ETL / Transform",   fmt(pipeline["transformation"])),
+                ("Vector DB Storage", fmt(pipeline["vector_db_storage"])),
+                ("Vector DB Queries", fmt(pipeline["vector_db_queries"])),
+                ("Raw Storage",       fmt(pipeline["raw_storage"])),
             ], columns=["Component","Monthly"]).set_index("Component"))
     with col_c:
         with st.expander("Labor Detail"):
-            rows = [(r, fmt(c)) for r,c in labor["breakdown"].items() if c > 0]
+            rows = [(r, fmt(c)) for r, c in labor["breakdown"].items() if c > 0]
             if rows:
                 st.table(pd.DataFrame(rows, columns=["Role","Monthly"]).set_index("Role"))
 
 
-# ════════════════════════════════════════════════════════════════════════════
-# TAB 1 — Executive Dashboard
-# ════════════════════════════════════════════════════════════════════════════
-with tab_dashboard:
+# ────────────────────────────────────────────────────────────────────────────
+# CONTENT TAB 1 — Overview
+# ────────────────────────────────────────────────────────────────────────────
+with tab_ov:
     # Hero
+    st.markdown(f"""
+    <div class="gc-hero">
+        <div class="gc-eyebrow">☁️ Cloud-agnostic GenAI cost intelligence</div>
+        <h1>Understand the true cost and ROI of GenAI investments</h1>
+        <p>
+            GenAI cost is not only model pricing. The real total cost of ownership spans tokens,
+            infrastructure, data pipelines, security, governance, operations, and business value
+            realization — across any cloud, model provider, or deployment pattern.
+        </p>
+        <div class="gc-cta-row">
+            <span class="gc-btn-primary">Open Calculator</span>
+            <span class="gc-btn-secondary">View Scenarios</span>
+        </div>
+    </div>""", unsafe_allow_html=True)
+
+    # Live KPI row
+    cost_per_query = tco["monthly"] / monthly_queries if monthly_queries else 0
+    k1, k2, k3, k4 = st.columns(4)
+    with k1: gc_card("Monthly TCO",    fmt(tco["monthly"]),        f"Annual: {fmt(tco['annual'])}",        "gc-blue")
+    with k2: gc_card("Cost Per Query", f"${cost_per_query:.5f}",   f"{monthly_queries:,} queries/month",   "gc-green")
+    with k3: gc_card("Annual TCO",     fmt(tco["annual"]),         f"3-Year: {fmt(tco['three_year'])}",    "gc-yellow")
+    with k4: gc_card("Top Cost Driver", max(tco["breakdown"], key=tco["breakdown"].get),
+                     f"{fmt(tco['breakdown'][max(tco['breakdown'], key=tco['breakdown'].get)])}/month", "gc-red")
+
+    st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
+
+    # What is Tokenomics
+    st.markdown("""
+    <div class="gc-section-title">What is GenAI Tokenomics?</div>
+    <div class="gc-section-sub">
+        Tokenomics is the cost model behind all GenAI usage. Every prompt, response, embedding,
+        retrieval step, agent action, and system instruction consumes tokens — and tokens drive cost.
+        Understanding tokenomics is the foundation of any accurate TCO model.
+    </div>""", unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="gc-callout">
+        <div class="gc-callout-title">🪙 Why token costs are hard to estimate</div>
+        <div class="gc-callout-body">
+            Token usage changes based on prompt length, response length, number of active users,
+            conversation depth, retrieval context size, model choice, agent loop steps, retry frequency,
+            and application design. A small change in prompt engineering or model routing can create a
+            large difference in monthly spend. Most early estimates undercount total cost by 2–4×
+            because they only model the API cost and ignore infrastructure, data pipelines, security,
+            governance, and operations.
+        </div>
+    </div>""", unsafe_allow_html=True)
+
+    tok1, tok2, tok3, tok4 = st.columns(4)
+    with tok1: st.markdown(info_card("📥", "Input Tokens",
+        "Every prompt, document chunk, system instruction, conversation history, and retrieved context consumes input tokens billed at the input rate."), unsafe_allow_html=True)
+    with tok2: st.markdown(info_card("📤", "Output Tokens",
+        "Every response, generated code block, structured JSON, reasoning trace, and agent action output is billed at a higher output rate per token."), unsafe_allow_html=True)
+    with tok3: st.markdown(info_card("🔢", "Embedding Tokens",
+        "Document indexing, semantic search, reranking, and similarity matching each require embedding model calls — adding to per-query token cost."), unsafe_allow_html=True)
+    with tok4: st.markdown(info_card("🔁", "Agent Loop Tokens",
+        "Agentic workflows multiply token usage — one user request may trigger 5–20 model calls, each with its own prompt, tool call, and response."), unsafe_allow_html=True)
+
+    st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
+
+    # Six pillars
+    st.markdown("""
+    <div class="gc-section-title">Six Pillars of GenAI Total Cost of Ownership</div>
+    <div class="gc-section-sub">
+        The most accurate GenAI business case combines all six cost pillars. Token cost is the most
+        visible line item, but infrastructure, data pipelines, security, and operations are often the
+        largest long-term TCO drivers.
+    </div>""", unsafe_allow_html=True)
+
+    p1, p2, p3 = st.columns(3)
+    with p1: st.markdown(info_card("🧠", "Model & Token Cost",
+        "Input tokens, output tokens, embeddings, reranking, fine-tuning, batch inference jobs, agent calls, and evaluation runs. Price varies significantly across model tiers."), unsafe_allow_html=True)
+    with p2: st.markdown(info_card("🖥️", "Infrastructure Cost",
+        "GPU or CPU inference compute, hosted endpoints, containers, orchestration, auto-scaling, networking, storage, backup, and disaster recovery infrastructure."), unsafe_allow_html=True)
+    with p3: st.markdown(info_card("🗄️", "Data & Retrieval Cost",
+        "Vector databases, document ingestion pipelines, chunking, indexing, metadata storage, retrieval API calls, data refresh cycles, and embedding refresh."), unsafe_allow_html=True)
+
+    st.markdown("<div style='height:12px'></div>", unsafe_allow_html=True)
+    p4, p5, p6 = st.columns(3)
+    with p4: st.markdown(info_card("🔒", "Security & Governance",
+        "Prompt filtering, DLP controls, audit logging, access management, red teaming, policy enforcement, compliance evidence generation, and model risk management."), unsafe_allow_html=True)
+    with p5: st.markdown(info_card("⚙️", "Operations & Support",
+        "Monitoring, alerting, incident response, quality evaluation, prompt lifecycle management, release management, platform engineering, and end-user support."), unsafe_allow_html=True)
+    with p6: st.markdown(info_card("📈", "Business Value",
+        "Productivity gains, automation savings, customer support deflection, revenue uplift, faster decision cycles, reduced manual effort, and improved employee experience."), unsafe_allow_html=True)
+
+    st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
+
+    # Eight challenges
+    st.markdown("""
+    <div class="gc-section-title">Why Accurate GenAI TCO Is Hard to Calculate</div>
+    <div class="gc-section-sub">
+        Most GenAI TCO estimates are wrong — not because the models are bad, but because usage
+        patterns are dynamic, many costs are indirect, and cost attribution across teams is complex.
+        These are the eight most common estimation blind spots.
+    </div>""", unsafe_allow_html=True)
+
+    ch1, ch2 = st.columns(2)
+    with ch1:
+        st.markdown(challenge_card("📊", "Unpredictable Usage Growth",
+            "User adoption, request frequency, and conversation length change quickly after launch. A 50-user pilot can hit 10× the token volume when rolled out to 5,000 users."), unsafe_allow_html=True)
+        st.markdown(challenge_card("🔀", "Variable Token Consumption",
+            "Different prompts, document types, and response styles produce very different token volumes per request. A 20% increase in average context length can raise monthly cost by 40%."), unsafe_allow_html=True)
+        st.markdown(challenge_card("🤖", "Hidden Agent & Tool Call Cost",
+            "One business task may trigger 10–20 model calls, tool invocations, and retrieval steps internally — each billed at full token rates. Agent loops are the most underestimated cost driver."), unsafe_allow_html=True)
+        st.markdown(challenge_card("💰", "Model Price Differences by Task",
+            "Input rates, output rates, embedding rates, and batch pricing vary significantly across model tiers. Using the wrong model for routine tasks inflates cost by 5–10×."), unsafe_allow_html=True)
+    with ch2:
+        st.markdown(challenge_card("⚡", "GPU Utilization Sensitivity",
+            "Infrastructure cost depends heavily on GPU utilization, request concurrency, latency targets, and auto-scaling thresholds. A 30% utilization difference can double per-request cost."), unsafe_allow_html=True)
+        st.markdown(challenge_card("⚖️", "Quality vs. Cost Tradeoff",
+            "The cheapest model or most compressed prompt may reduce answer quality, increase retry rates, trigger human review, or create downstream error costs that exceed the savings."), unsafe_allow_html=True)
+        st.markdown(challenge_card("🔒", "Governance & Compliance Overhead",
+            "Security controls, DLP filtering, audit logging, access management, and compliance evidence requirements add necessary enterprise cost rarely included in initial estimates."), unsafe_allow_html=True)
+        st.markdown(challenge_card("📐", "ROI Attribution Complexity",
+            "Proving that savings came directly from GenAI — rather than process, headcount, or seasonal changes — requires controlled baselines that most teams do not set up in advance."), unsafe_allow_html=True)
+
+    st.markdown("<div style='height:20px'></div>", unsafe_allow_html=True)
+
+    # Live charts
+    col_l, col_r = st.columns([1, 1])
+    with col_l:
+        st.markdown("#### Live Cost Distribution")
+        fig_pie = go.Figure(go.Pie(
+            labels=list(tco["breakdown"].keys()),
+            values=list(tco["breakdown"].values()),
+            hole=0.52,
+            marker=dict(colors=COLORS, line=dict(color="#FFFFFF", width=2)),
+            textfont=dict(color=GC["text"], size=11, family="Roboto, Arial"),
+            hovertemplate="<b>%{label}</b><br>$%{value:,.0f}<br>%{percent}<extra></extra>",
+        ))
+        fig_pie.add_annotation(
+            text=f"<b>{fmt(tco['monthly'])}</b><br><span style='font-size:11px;color:#5F6368'>per month</span>",
+            x=0.5, y=0.5, showarrow=False, font=dict(size=16, color=GC["text"]), align="center")
+        fig_pie.update_layout(**chart_layout(height=340, showlegend=True,
+                                              legend=dict(orientation="v", x=1.02, y=0.5)))
+        st.plotly_chart(fig_pie, use_container_width=True)
+
+    with col_r:
+        st.markdown("#### 3-Year TCO Projection")
+        proj    = project_costs_over_time(tco["monthly"], 36)
+        df_proj = pd.DataFrame(proj)
+        fig_tco = go.Figure()
+        fig_tco.add_trace(go.Bar(
+            x=df_proj["month"], y=df_proj["monthly"], name="Monthly Cost",
+            marker_color="rgba(26,115,232,0.25)", yaxis="y2"))
+        fig_tco.add_trace(go.Scatter(
+            x=df_proj["month"], y=df_proj["cumulative"], name="Cumulative Cost",
+            line=dict(color=GC["blue"], width=2.5),
+            fill="tozeroy", fillcolor="rgba(26,115,232,0.07)"))
+        layout = chart_layout(height=340)
+        layout["yaxis"]  = dict(**layout.get("yaxis",{}), title="Cumulative ($)")
+        layout["yaxis2"] = dict(title="Monthly ($)", overlaying="y", side="right",
+                                 gridcolor="#F1F3F4", linecolor=GC["border"])
+        layout["legend"] = dict(orientation="h", y=-0.18, bgcolor="rgba(255,255,255,0)")
+        fig_tco.update_layout(**layout)
+        st.plotly_chart(fig_tco, use_container_width=True)
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# CONTENT TAB 2 — Scenarios
+# ────────────────────────────────────────────────────────────────────────────
+with tab_sc_info:
+    section("Scenarios",
+            "Compare GenAI deployment patterns before committing investment. Different architectures produce very different cost and ROI profiles.")
+
+    st.markdown("""
+    <div class="gc-callout">
+        <div class="gc-callout-title">📐 How to choose a scenario</div>
+        <div class="gc-callout-body">
+            The best scenario balances cost, performance, quality, latency, security, compliance, and
+            business value. A low-cost model may produce poor responses, while an expensive model may
+            be unnecessary for simple classification or retrieval tasks. Evaluate using total value per
+            query — not just cost per query. Use the Scenario Comparison calculator tab to run numbers.
+        </div>
+    </div>""", unsafe_allow_html=True)
+
+    st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+    sc1, sc2 = st.columns(2)
+    with sc1:
+        st.markdown("""
+        <div class="gc-scenario-card">
+            <span class="gc-scenario-badge" style="background:#E8F0FE;color:#174EA6;">Baseline</span>
+            <div class="gc-scenario-title">Cloud API — Direct</div>
+            <div class="gc-scenario-desc">
+                Standard model API usage with default prompts, no caching, and basic observability.
+                Fastest path from idea to production. Best for pilots, proof-of-concept, and early
+                exploration where speed matters more than cost efficiency.
+            </div>
+            <div class="gc-tag-row">
+                <span class="gc-tag">No infra overhead</span>
+                <span class="gc-tag">Pay-per-token</span>
+                <span class="gc-tag">Fast to deploy</span>
+                <span class="gc-tag">High token cost at scale</span>
+                <span class="gc-tag">Zero MLOps burden</span>
+            </div>
+        </div>""", unsafe_allow_html=True)
+    with sc2:
+        st.markdown("""
+        <div class="gc-scenario-card">
+            <span class="gc-scenario-badge" style="background:#E6F4EA;color:#137333;">Optimized</span>
+            <div class="gc-scenario-title">Cloud API — Cost Optimized</div>
+            <div class="gc-scenario-desc">
+                Cost-optimized design using prompt compression, semantic caching, model routing, and
+                reduced context size. Applies 40–60% token savings over baseline. Best for production
+                workloads scaling to tens of thousands of users.
+            </div>
+            <div class="gc-tag-row">
+                <span class="gc-tag">40–60% token savings</span>
+                <span class="gc-tag">Model routing</span>
+                <span class="gc-tag">Semantic caching</span>
+                <span class="gc-tag">Batch processing</span>
+                <span class="gc-tag">Context compression</span>
+            </div>
+        </div>""", unsafe_allow_html=True)
+
+    st.markdown("<div style='height:12px'></div>", unsafe_allow_html=True)
+    sc3, sc4 = st.columns(2)
+    with sc3:
+        st.markdown("""
+        <div class="gc-scenario-card">
+            <span class="gc-scenario-badge" style="background:#FEF7E0;color:#B06000;">Enterprise</span>
+            <div class="gc-scenario-title">Fine-tuned Open Source</div>
+            <div class="gc-scenario-desc">
+                Domain-adapted open model running on dedicated cloud GPU. One-time fine-tuning
+                investment with lower ongoing inference cost at scale. Best for specialized tasks
+                exceeding 1M queries per month where domain accuracy matters.
+            </div>
+            <div class="gc-tag-row">
+                <span class="gc-tag">Training CapEx</span>
+                <span class="gc-tag">GPU inference cost</span>
+                <span class="gc-tag">Domain accuracy</span>
+                <span class="gc-tag">MLOps overhead</span>
+                <span class="gc-tag">Predictable cost</span>
+            </div>
+        </div>""", unsafe_allow_html=True)
+    with sc4:
+        st.markdown("""
+        <div class="gc-scenario-card">
+            <span class="gc-scenario-badge" style="background:#FCE8E6;color:#C5221F;">Self-hosted</span>
+            <div class="gc-scenario-title">Self-hosted / Private Cluster</div>
+            <div class="gc-scenario-desc">
+                Full GPU cluster with complete data sovereignty. No token costs. Every query runs on
+                owned infrastructure. Best for regulated industries, very high query volume, and
+                organizations with strict data residency requirements.
+            </div>
+            <div class="gc-tag-row">
+                <span class="gc-tag">Full data control</span>
+                <span class="gc-tag">Data sovereignty</span>
+                <span class="gc-tag">High CapEx</span>
+                <span class="gc-tag">GPU ops team required</span>
+                <span class="gc-tag">No token billing</span>
+            </div>
+        </div>""", unsafe_allow_html=True)
+
+    st.markdown("<div style='height:24px'></div>", unsafe_allow_html=True)
+    sub_hdr("Scenario Selection Guide")
+
+    guide_data = {
+        "Criterion": [
+            "Query volume", "Data sensitivity", "Budget type",
+            "Team size", "Time to production", "Domain accuracy need",
+            "Cost predictability", "Compliance requirements"
+        ],
+        "Cloud API (Baseline)": [
+            "< 500K / month", "Low–Medium", "OpEx preferred",
+            "Small (1–3)", "Days", "General purpose OK",
+            "Variable (usage-based)", "Low–Medium"
+        ],
+        "Optimized API": [
+            "500K–5M / month", "Low–Medium", "OpEx preferred",
+            "Medium (2–5)", "Weeks", "General purpose OK",
+            "Moderate (with caching)", "Low–Medium"
+        ],
+        "Fine-tuned OSS": [
+            "> 1M / month", "Medium–High", "Mixed CapEx + OpEx",
+            "Medium–Large (5–15)", "1–3 months", "High",
+            "High (fixed GPU cost)", "Medium"
+        ],
+        "Self-hosted": [
+            "> 5M / month", "Very High", "CapEx heavy",
+            "Large (10+)", "3–6 months", "Full control",
+            "Very High (fixed infra)", "Very High"
+        ],
+    }
+    st.dataframe(pd.DataFrame(guide_data).set_index("Criterion"), use_container_width=True)
+
+    st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
+    st.markdown("""
+    <div style="font-size:13px;color:#5F6368;line-height:1.7;padding:16px 20px;
+         background:#F8FAFD;border:1px solid #DADCE0;border-radius:12px;">
+        <strong style="color:#202124">Key insight:</strong> Most enterprises start with Cloud API (Baseline) for speed,
+        optimize to Cloud API (Optimized) within 90 days of production, and evaluate Fine-tuned OSS
+        at 6–12 months when usage volume justifies the training investment.
+        Self-hosted is typically a 12–24 month journey requiring a dedicated platform team.
+    </div>""", unsafe_allow_html=True)
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# CONTENT TAB 3 — Optimization
+# ────────────────────────────────────────────────────────────────────────────
+with tab_opt_info:
+    section("Optimization",
+            "Reduce GenAI cost without reducing business value. Apply these six levers to lower token waste, improve model selection, and maximize value per request.")
+
+    st.markdown("""
+    <div class="gc-callout">
+        <div class="gc-callout-title">💡 The goal of GenAI optimization</div>
+        <div class="gc-callout-body">
+            The best GenAI cost strategy combines token reduction, model routing, caching, retrieval
+            tuning, GPU utilization improvement, and strong governance. The goal is not to minimize
+            cost at all times, but to maximize value per token. Use the GPU Optimization calculator
+            tab and Cost Components tab to quantify savings from each technique.
+        </div>
+    </div>""", unsafe_allow_html=True)
+
+    st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+    ot1, ot2, ot3 = st.columns(3)
+    with ot1:
+        st.markdown(opt_card("🪙", "Token Optimization",
+            "Control prompt size, response length, context injection, and conversation history to reduce token waste. The highest-leverage, lowest-effort cost reduction available.",
+            ["Shorten and compress system prompts",
+             "Limit retrieved context to relevant chunks only",
+             "Summarize long conversation history before injecting",
+             "Use structured outputs (JSON) to reduce verbosity",
+             "Remove duplicate or boilerplate context",
+             "Track input-to-output token ratio monthly"]), unsafe_allow_html=True)
+    with ot2:
+        st.markdown(opt_card("🔀", "Model Routing",
+            "Route tasks to the right model tier. Not every request needs the most powerful or most expensive model. Routing saves 40–60% on most enterprise workloads.",
+            ["Simple FAQ or lookup → small / economy model",
+             "Summarization → mid-tier model",
+             "Complex reasoning → advanced model",
+             "Bulk classification → batch or economy tier",
+             "Sensitive or high-risk → governed model path",
+             "Track cost-per-task by routing tier"]), unsafe_allow_html=True)
+    with ot3:
+        st.markdown(opt_card("💾", "Caching Strategy",
+            "Repeated questions, common documents, and similar prompts can be cached to avoid redundant model calls. Typical cache-hit rates of 20–40% for support use cases.",
+            ["Exact-match prompt caching",
+             "Semantic similarity caching for near-duplicates",
+             "Embedding result caching",
+             "Retrieval result caching for common queries",
+             "Frequently-asked-question response cache",
+             "Cache-hit rate tracking and monthly review"]), unsafe_allow_html=True)
+
+    st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
+    ot4, ot5, ot6 = st.columns(3)
+    with ot4:
+        st.markdown(opt_card("🔍", "Retrieval Tuning",
+            "RAG improves accuracy, but over-retrieval inflates token cost. Optimize chunking, ranking, and context selection to pass only what the model needs.",
+            ["Right-size chunk length for your content type",
+             "Use metadata filters before vector search",
+             "Limit top-k retrieval to 3–5 documents max",
+             "Apply reranking selectively, not globally",
+             "Use document summaries instead of full text",
+             "Track retrieval-to-answer conversion quality"]), unsafe_allow_html=True)
+    with ot5:
+        st.markdown(opt_card("🖥️", "GPU & Infra Efficiency",
+            "For self-hosted or fine-tuned models, GPU utilization is the largest cost driver. Low utilization means expensive compute sitting idle.",
+            ["Target 65–80% GPU utilization",
+             "Use quantization (INT8 / FP8) where quality allows",
+             "Separate real-time and batch inference workloads",
+             "Auto-scale on request queue depth",
+             "Use reserved capacity for predictable base load",
+             "Track cost per 1,000 inference requests"]), unsafe_allow_html=True)
+    with ot6:
+        st.markdown(opt_card("🤖", "Agent Workflow Control",
+            "Agentic systems create hidden cost — one user request can trigger many model calls, tool calls, and retries. Each is billed at full token rates.",
+            ["Limit maximum agent reasoning steps",
+             "Add deterministic stop conditions",
+             "Track model calls and tool calls per task",
+             "Avoid redundant tool invocations",
+             "Cache intermediate agent results",
+             "Use deterministic logic where LLM is not needed"]), unsafe_allow_html=True)
+
+    st.markdown("<div style='height:24px'></div>", unsafe_allow_html=True)
+    sub_hdr("Optimization Priority Matrix")
+    matrix_data = {
+        "Technique": [
+            "Model routing", "Token / prompt compression", "Semantic caching",
+            "Retrieval tuning", "GPU utilization", "Agent step limits",
+            "Reserved capacity", "Quantization"
+        ],
+        "Effort": ["Low","Low","Medium","Medium","High","Low","Low","High"],
+        "Impact": ["Very High","High","High","Medium","Very High","Medium","High","Medium"],
+        "Typical Savings": ["40–60%","15–30%","20–40%","10–20%","20–50%","10–25%","35–45%","15–30%"],
+        "Applies To": [
+            "All API deployments", "All deployments", "High-volume support",
+            "RAG workloads", "Self-hosted / fine-tuned", "Agentic workflows",
+            "Predictable GPU load", "Self-hosted inference"
+        ],
+    }
+    st.dataframe(pd.DataFrame(matrix_data), use_container_width=True, hide_index=True)
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# CONTENT TAB 4 — Reports
+# ────────────────────────────────────────────────────────────────────────────
+with tab_rep_info:
+    section("Reports",
+            "Generate executive-ready GenAI TCO and ROI reports. Use the ROI & Payback and Docs & Export calculator tabs to produce and download these reports.")
+
+    st.markdown("""
+    <div class="gc-callout">
+        <div class="gc-callout-title">📋 Report disclaimer</div>
+        <div class="gc-callout-body">
+            All values are estimates based on provided assumptions. Actual GenAI cost may vary based
+            on user behavior, model pricing changes, token volume growth, infrastructure utilization,
+            data size, latency requirements, governance controls, and support needs.
+            Use these reports as directional guidance for investment decisions, not as fixed commitments.
+        </div>
+    </div>""", unsafe_allow_html=True)
+
+    st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+    r1, r2, r3 = st.columns(3)
+    with r1:
+        st.markdown(report_card("1", "Executive Summary",
+            "A business-level summary of estimated monthly TCO, annual TCO, savings potential, ROI, payback period, and top cost drivers — formatted for CFO and board presentations.",
+            ["Monthly and annual TCO",
+             "Estimated savings vs. alternatives",
+             "ROI percentage and payback period",
+             "Top 3 cost drivers",
+             "Recommended optimization actions"]), unsafe_allow_html=True)
+    with r2:
+        st.markdown(report_card("2", "Tokenomics Summary",
+            "Explains how token usage contributes to cost across prompts, responses, embeddings, retrieval, agent calls, and evaluation workloads — by use case.",
+            ["Monthly input and output token volume",
+             "Average tokens per request",
+             "Average requests per active user",
+             "Cost per 1,000 requests",
+             "Cost per active user per month",
+             "Token cost breakdown by use case"]), unsafe_allow_html=True)
+    with r3:
+        st.markdown(report_card("3", "Cost Breakdown Report",
+            "Shows how total cost is distributed across model usage, infrastructure, storage, security, governance, monitoring, and operations — with trend projections.",
+            ["Model / API cost",
+             "GPU and compute cost",
+             "Vector database and storage cost",
+             "Data pipeline and ingestion cost",
+             "Security and governance overhead",
+             "Monitoring and operations cost"]), unsafe_allow_html=True)
+
+    st.markdown("<div style='height:12px'></div>", unsafe_allow_html=True)
+    r4, r5, r6 = st.columns(3)
+    with r4:
+        st.markdown(report_card("4", "Scenario Comparison",
+            "Compares baseline, optimized, enterprise-secure, and self-hosted scenarios using consistent assumptions — so stakeholders can compare apples to apples.",
+            ["Scenario assumptions documented",
+             "Monthly and annual TCO by scenario",
+             "Savings difference between scenarios",
+             "Risk and compliance level comparison",
+             "Operational complexity rating",
+             "Recommended scenario with rationale"]), unsafe_allow_html=True)
+    with r5:
+        st.markdown(report_card("5", "ROI & Payback Report",
+            "Connects GenAI investment to measurable business outcomes — productivity improvement, automation savings, customer support deflection, and reduced manual effort.",
+            ["Annual benefit and annual cost",
+             "Net savings and ROI percentage",
+             "Payback period in months",
+             "5-year NPV at 10% discount rate",
+             "IRR calculation",
+             "Benefit ramp and sensitivity analysis"]), unsafe_allow_html=True)
+    with r6:
+        st.markdown(report_card("6", "Assumptions & Methodology",
+            "Documents all assumptions used in the TCO model so that finance, engineering, security, and business teams can review and challenge the calculation.",
+            ["User count and request volume assumptions",
+             "Token consumption assumptions",
+             "Model and infrastructure assumptions",
+             "Security and compliance cost assumptions",
+             "Operations and support assumptions",
+             "Business benefit methodology"]), unsafe_allow_html=True)
+
+    st.markdown("<div style='height:20px'></div>", unsafe_allow_html=True)
+    sub_hdr("Available Export Formats")
+    ef1, ef2, ef3 = st.columns(3)
+    with ef1:
+        st.markdown(info_card("📄", "Executive CSV",
+            "Current scenario with all TCO, ROI, and benefit metrics in a single downloadable spreadsheet. Available in the Docs & Export calculator tab."), unsafe_allow_html=True)
+    with ef2:
+        st.markdown(info_card("📊", "Scenario Comparison CSV",
+            "Side-by-side comparison of all four deployment scenarios with monthly cost, annual cost, and vs-current delta. Available in the Docs & Export calculator tab."), unsafe_allow_html=True)
+    with ef3:
+        st.markdown(info_card("📋", "Assumptions Reference",
+            "Full formula reference, GPU pricing table, LLM API pricing table, and architecture decision guide. Available in the Docs & Export calculator tab."), unsafe_allow_html=True)
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# CALCULATOR TAB 1 — Executive Dashboard
+# ────────────────────────────────────────────────────────────────────────────
+with tab_dashboard:
     st.markdown(f"""
     <div class="gc-hero">
         <div class="gc-eyebrow">☁️ Cloud cost intelligence for GenAI</div>
@@ -532,7 +1152,6 @@ with tab_dashboard:
         </div>
     </div>""", unsafe_allow_html=True)
 
-    # KPI row
     cost_per_query = tco["monthly"] / monthly_queries if monthly_queries else 0
     k1, k2, k3, k4 = st.columns(4)
     with k1: gc_card("Monthly TCO",    fmt(tco["monthly"]),             f"Annual: {fmt(tco['annual'])}",         "gc-blue")
@@ -543,7 +1162,6 @@ with tab_dashboard:
     st.markdown("<div style='height:24px'></div>", unsafe_allow_html=True)
 
     col_l, col_r = st.columns([1, 1])
-
     with col_l:
         st.markdown("#### Cost Distribution")
         fig_pie = go.Figure(go.Pie(
@@ -568,7 +1186,7 @@ with tab_dashboard:
         fig_tco = go.Figure()
         fig_tco.add_trace(go.Bar(
             x=df_proj["month"], y=df_proj["monthly"], name="Monthly Cost",
-            marker_color=f"rgba(26,115,232,0.25)", yaxis="y2"))
+            marker_color="rgba(26,115,232,0.25)", yaxis="y2"))
         fig_tco.add_trace(go.Scatter(
             x=df_proj["month"], y=df_proj["cumulative"], name="Cumulative Cost",
             line=dict(color=GC["blue"], width=2.5),
@@ -581,7 +1199,6 @@ with tab_dashboard:
         fig_tco.update_layout(**layout)
         st.plotly_chart(fig_tco, use_container_width=True)
 
-    # Summary table
     st.markdown("#### Cost Summary")
     st.dataframe(pd.DataFrame({
         "Period":      ["Monthly","Quarterly","Annual","3-Year","5-Year"],
@@ -591,7 +1208,6 @@ with tab_dashboard:
         "Top Driver":  [max(tco["breakdown"], key=tco["breakdown"].get)]*5,
     }), use_container_width=True, hide_index=True)
 
-    # Recommendations
     st.markdown("#### Strategic Recommendations")
     largest = max(tco["breakdown"], key=tco["breakdown"].get)
     if largest == "Labor":
@@ -615,9 +1231,9 @@ with tab_dashboard:
         GC["purple"])
 
 
-# ════════════════════════════════════════════════════════════════════════════
-# TAB 3 — Scenario Comparison
-# ════════════════════════════════════════════════════════════════════════════
+# ────────────────────────────────────────────────────────────────────────────
+# CALCULATOR TAB 3 — Scenario Comparison
+# ────────────────────────────────────────────────────────────────────────────
 with tab_scenario:
     section("Scenario Comparison",
             "Compare baseline, optimized, and alternative deployment options side by side.")
@@ -627,7 +1243,6 @@ with tab_scenario:
                        networking_egress_gb=networking_egress_gb, utilization_pct=utilization_pct)
     scenarios = compute_scenario_comparison(base_inputs)
 
-    # Scenario KPI cards
     s_cols = st.columns(len(scenarios))
     colors_sc = ["gc-blue","gc-green","gc-red","gc-yellow"]
     lowest = min(scenarios, key=lambda k: scenarios[k]["total"])
@@ -656,15 +1271,15 @@ with tab_scenario:
     st.plotly_chart(fig_sc, use_container_width=True)
 
     st.markdown("#### Detailed Breakdown")
-    rows = []
+    sc_rows = []
     for name, vals in scenarios.items():
         diff = tco["monthly"] - vals["total"]
-        rows.append({"Scenario": name, "Model Cost": fmt(vals["model"]),
+        sc_rows.append({"Scenario": name, "Model Cost": fmt(vals["model"]),
                      "Infra Cost": fmt(vals["infra"]), "Total/Month": fmt(vals["total"]),
                      "Annual": fmt(vals["total"]*12),
                      "vs Current": ("+"+fmt(diff) if diff > 0 else fmt(diff)),
                      "": ("✅ Best" if name == lowest else "")})
-    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+    st.dataframe(pd.DataFrame(sc_rows), use_container_width=True, hide_index=True)
 
     st.divider()
     sub_hdr("Model-by-Model API Cost Comparison")
@@ -686,7 +1301,7 @@ with tab_scenario:
     cloud_m  = list(scenarios.values())[0]["total"] + labor["total"] + pipeline["total"]
     onprem_m = list(scenarios.values())[2]["total"] + labor["total"] + pipeline["total"]
     capex    = GPU_PRICING.get(gpu_type,{}).get("on_demand_hourly",3.67)*gpu_count*8760*0.2
-    months_r   = list(range(1,37))
+    months_r   = list(range(1, 37))
     cloud_cum  = [cloud_m*m for m in months_r]
     onprem_cum = [capex+onprem_m*m for m in months_r]
     fig_cvo = go.Figure()
@@ -705,9 +1320,9 @@ with tab_scenario:
     st.plotly_chart(fig_cvo, use_container_width=True)
 
 
-# ════════════════════════════════════════════════════════════════════════════
-# TAB 4 — GPU Optimization
-# ════════════════════════════════════════════════════════════════════════════
+# ────────────────────────────────────────────────────────────────────────────
+# CALCULATOR TAB 4 — GPU Optimization
+# ────────────────────────────────────────────────────────────────────────────
 with tab_gpu:
     section("GPU Optimization",
             "Estimate GPU cost, utilization curves, reserved capacity savings, and idle waste.")
@@ -775,9 +1390,9 @@ with tab_gpu:
     st.plotly_chart(fig_idle, use_container_width=True)
 
 
-# ════════════════════════════════════════════════════════════════════════════
-# TAB 5 — ROI & Payback
-# ════════════════════════════════════════════════════════════════════════════
+# ────────────────────────────────────────────────────────────────────────────
+# CALCULATOR TAB 5 — ROI & Payback
+# ────────────────────────────────────────────────────────────────────────────
 with tab_roi:
     section("ROI & Business Case",
             "Quantify productivity gains, cost avoidance, revenue impact, payback period, and NPV.")
@@ -894,9 +1509,9 @@ with tab_roi:
     st.plotly_chart(fig_rp, use_container_width=True)
 
 
-# ════════════════════════════════════════════════════════════════════════════
-# TAB 6 — Docs & Export
-# ════════════════════════════════════════════════════════════════════════════
+# ────────────────────────────────────────────────────────────────────────────
+# CALCULATOR TAB 6 — Docs & Export
+# ────────────────────────────────────────────────────────────────────────────
 with tab_export:
     section("Docs & Export",
             "Formula reference, pricing tables, architecture notes, and downloadable scenario outputs.")
