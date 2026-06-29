@@ -15,7 +15,7 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Open [http://localhost:8501](http://localhost:8501)
+Open [[http://localhost:8501](http://localhost:8501)](https://genai-tco-calc.streamlit.app/)
 
 ---
 
