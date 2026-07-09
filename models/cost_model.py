@@ -1,4 +1,3 @@
-import numpy as np
 from .pricing_data import GPU_PRICING, LLM_API_PRICING, CLOUD_STORAGE_PRICING, CLOUD_NETWORK_EGRESS
 
 
@@ -162,7 +161,7 @@ def compute_scenario_comparison(base_inputs):
 
     # Scenario B: Fine-tuned open-source on cloud GPU
     ft_inference_gpu_cost = compute_gpu_monthly_cost(
-        "NVIDIA A100 (80GB)", 2, base_inputs["utilization_pct"], "reserved_1yr"
+        "NVIDIA A100 80GB", 2, base_inputs["utilization_pct"], "reserved_1yr"
     )
     scenarios["Fine-tuned (LLaMA 70B, A100 x2)"] = {
         "total": ft_inference_gpu_cost + api_infra["total"],
@@ -172,7 +171,7 @@ def compute_scenario_comparison(base_inputs):
 
     # Scenario C: Self-hosted on-prem
     onprem_gpu = compute_gpu_monthly_cost(
-        "NVIDIA A100 (80GB)", 4, base_inputs["utilization_pct"], "on_demand"
+        "NVIDIA A100 80GB", 4, base_inputs["utilization_pct"], "on_demand"
     )
     onprem_infra = onprem_gpu + base_inputs["storage_gb"] * 0.005 + 200  # on-prem storage cheaper
     scenarios["Self-hosted On-Prem (A100 x4)"] = {

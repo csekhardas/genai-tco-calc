@@ -1,13 +1,31 @@
 GPU_PRICING = {
-    "NVIDIA A100 (80GB)": {
-        "on_demand_hourly": 3.67,
-        "reserved_1yr_hourly": 2.20,
-        "reserved_3yr_hourly": 1.50,
-        "memory_gb": 80,
-        "flops_bf16_tflops": 312,
-        "cloud": "GCP / AWS / Azure",
+    # ── Blackwell (B-series) ────────────────────────────────────────────────
+    "NVIDIA GB200 192GB": {
+        "on_demand_hourly": 40.00,
+        "reserved_1yr_hourly": 26.00,
+        "reserved_3yr_hourly": 18.00,
+        "memory_gb": 192,
+        "flops_bf16_tflops": 4500,
+        "cloud": "AWS / GCP / Azure",
     },
-    "NVIDIA H100 (80GB)": {
+    "NVIDIA B200 180GB": {
+        "on_demand_hourly": 30.00,
+        "reserved_1yr_hourly": 19.50,
+        "reserved_3yr_hourly": 13.50,
+        "memory_gb": 180,
+        "flops_bf16_tflops": 2250,
+        "cloud": "AWS / GCP / Azure",
+    },
+    # ── Hopper (H-series) ──────────────────────────────────────────────────
+    "NVIDIA H200 141GB": {
+        "on_demand_hourly": 16.00,
+        "reserved_1yr_hourly": 10.00,
+        "reserved_3yr_hourly": 7.00,
+        "memory_gb": 141,
+        "flops_bf16_tflops": 989,
+        "cloud": "AWS / GCP / Azure",
+    },
+    "NVIDIA H100 80GB": {
         "on_demand_hourly": 8.00,
         "reserved_1yr_hourly": 5.50,
         "reserved_3yr_hourly": 4.00,
@@ -15,6 +33,41 @@ GPU_PRICING = {
         "flops_bf16_tflops": 989,
         "cloud": "GCP / AWS / Azure",
     },
+    "NVIDIA H100 80GB MEGA": {
+        "on_demand_hourly": 7.20,
+        "reserved_1yr_hourly": 4.80,
+        "reserved_3yr_hourly": 3.40,
+        "memory_gb": 80,
+        "flops_bf16_tflops": 756,
+        "cloud": "AWS / Azure",
+    },
+    # ── Ampere (A-series) ──────────────────────────────────────────────────
+    "NVIDIA A100 80GB": {
+        "on_demand_hourly": 3.67,
+        "reserved_1yr_hourly": 2.20,
+        "reserved_3yr_hourly": 1.50,
+        "memory_gb": 80,
+        "flops_bf16_tflops": 312,
+        "cloud": "GCP / AWS / Azure",
+    },
+    "NVIDIA A100 40GB": {
+        "on_demand_hourly": 2.50,
+        "reserved_1yr_hourly": 1.50,
+        "reserved_3yr_hourly": 1.05,
+        "memory_gb": 40,
+        "flops_bf16_tflops": 312,
+        "cloud": "AWS / GCP",
+    },
+    # ── Ada Lovelace (Professional) ────────────────────────────────────────
+    "NVIDIA RTX PRO 6000": {
+        "on_demand_hourly": 2.20,
+        "reserved_1yr_hourly": 1.40,
+        "reserved_3yr_hourly": 1.00,
+        "memory_gb": 96,
+        "flops_bf16_tflops": 500,
+        "cloud": "Select Providers",
+    },
+    # ── Ada / Turing (L / T series) ────────────────────────────────────────
     "NVIDIA L4": {
         "on_demand_hourly": 0.75,
         "reserved_1yr_hourly": 0.45,
@@ -23,7 +76,16 @@ GPU_PRICING = {
         "flops_bf16_tflops": 121.5,
         "cloud": "GCP",
     },
-    "NVIDIA V100 (16GB)": {
+    "NVIDIA T4": {
+        "on_demand_hourly": 0.35,
+        "reserved_1yr_hourly": 0.21,
+        "reserved_3yr_hourly": 0.15,
+        "memory_gb": 16,
+        "flops_bf16_tflops": 65.0,
+        "cloud": "AWS / GCP / Azure",
+    },
+    # ── Volta ──────────────────────────────────────────────────────────────
+    "NVIDIA V100": {
         "on_demand_hourly": 2.48,
         "reserved_1yr_hourly": 1.49,
         "reserved_3yr_hourly": 1.04,
@@ -31,6 +93,24 @@ GPU_PRICING = {
         "flops_bf16_tflops": 112,
         "cloud": "GCP / AWS",
     },
+    # ── Pascal ─────────────────────────────────────────────────────────────
+    "NVIDIA Tesla P100": {
+        "on_demand_hourly": 1.46,
+        "reserved_1yr_hourly": 0.88,
+        "reserved_3yr_hourly": 0.61,
+        "memory_gb": 16,
+        "flops_bf16_tflops": 18.7,
+        "cloud": "GCP / AWS",
+    },
+    "NVIDIA Tesla P4": {
+        "on_demand_hourly": 0.25,
+        "reserved_1yr_hourly": 0.15,
+        "reserved_3yr_hourly": 0.11,
+        "memory_gb": 8,
+        "flops_bf16_tflops": 22.0,
+        "cloud": "GCP",
+    },
+    # ── Google TPU ─────────────────────────────────────────────────────────
     "TPU v4 (per chip)": {
         "on_demand_hourly": 3.22,
         "reserved_1yr_hourly": 1.93,
