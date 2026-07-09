@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
+import base64
+import os
 from models.pricing_data import (
     GPU_PRICING, LLM_API_PRICING, LABOR_RATES, VECTOR_DB_PRICING,
     OPEN_SOURCE_MODELS, FINE_TUNING_GPU_HOURS_PER_BILLION_TOKENS,
@@ -18,6 +20,10 @@ from models.roi_model import (
     compute_productivity_gains, compute_cost_avoidance,
     compute_revenue_impact, compute_full_roi,
 )
+
+_logo_path = os.path.join(os.path.dirname(__file__), "AI-CostLens_logo.png")
+with open(_logo_path, "rb") as _f:
+    _logo_b64 = base64.b64encode(_f.read()).decode()
 
 st.set_page_config(
     page_title="GenAI TCO Calculator",
@@ -428,13 +434,10 @@ def report_card(num, title, body, includes):
 
 # ─── Sidebar ─────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("""
-    <div style="display:flex;align-items:center;gap:10px;padding:6px 0 14px">
-        <span style="font-size:30px">☁️</span>
-        <div>
-            <div style="font-family:'Google Sans',Roboto,Arial,sans-serif;font-size:16px;font-weight:700;color:#202124;">GenAI TCO</div>
-            <div style="font-size:11px;color:#5F6368;letter-spacing:0.5px;">Enterprise Calculator</div>
-        </div>
+    st.markdown(f"""
+    <div style="padding:6px 0 14px">
+        <img src="data:image/png;base64,{_logo_b64}"
+             style="width:100%;max-width:220px;height:auto;display:block;" />
     </div>""", unsafe_allow_html=True)
     st.divider()
 
@@ -450,10 +453,31 @@ with st.sidebar:
         "Document Processing & Summarization","Code Generation / Developer Tooling",
         "Sales & Marketing Personalization","Fraud Detection & Risk Analysis"])
 
+    _USE_CASE_TEMPLATES = {
+        "— pick a template —": None,
+        "🤖 Customer Support Bot":   {"queries": 500_000, "input_tok": 600,  "output_tok": 200},
+        "📚 Internal Knowledge Base":{"queries": 100_000, "input_tok": 1500, "output_tok": 500},
+        "📄 Document Summarization": {"queries":  50_000, "input_tok": 4000, "output_tok": 800},
+        "💻 Code Assistant":         {"queries": 200_000, "input_tok": 2000, "output_tok": 800},
+        "📣 Sales Intelligence":     {"queries": 300_000, "input_tok": 1000, "output_tok": 400},
+        "🔎 Fraud Detection":        {"queries": 2_000_000,"input_tok": 400,  "output_tok": 100},
+    }
+    tpl_choice = st.selectbox("Load Scale Template", list(_USE_CASE_TEMPLATES.keys()), key="tpl_choice")
+    if _USE_CASE_TEMPLATES[tpl_choice] is not None:
+        _t = _USE_CASE_TEMPLATES[tpl_choice]
+        if st.button("Apply Template", key="tpl_apply", use_container_width=True):
+            st.session_state["sc_queries"]    = _t["queries"]
+            st.session_state["sc_input_tok"]  = _t["input_tok"]
+            st.session_state["sc_output_tok"] = _t["output_tok"]
+            st.rerun()
+
     st.markdown("### Scale")
-    monthly_queries   = st.number_input("Monthly AI Queries", 1000, 50_000_000, 500_000, step=10_000)
-    avg_input_tokens  = st.slider("Avg Input Tokens / Query",  100, 8000, 800, step=100)
-    avg_output_tokens = st.slider("Avg Output Tokens / Query",  50, 4000, 300, step=50)
+    monthly_queries   = st.number_input("Monthly AI Queries", 1000, 50_000_000,
+                                         st.session_state.get("sc_queries",    500_000), step=10_000, key="sc_queries")
+    avg_input_tokens  = st.slider("Avg Input Tokens / Query",  100, 8000,
+                                   st.session_state.get("sc_input_tok",  800), step=100, key="sc_input_tok")
+    avg_output_tokens = st.slider("Avg Output Tokens / Query",  50, 4000,
+                                   st.session_state.get("sc_output_tok", 300), step=50,  key="sc_output_tok")
 
     st.markdown("### Deployment")
     cloud_provider  = st.selectbox("Cloud Provider", ["GCP","AWS","Azure"])
@@ -463,11 +487,14 @@ with st.sidebar:
         "API / Third-party LLM","Fine-tuned Open Source","Self-hosted OSS"])
 
     st.divider()
+    expert_mode = st.toggle("Expert Mode", value=False, key="expert_mode",
+                             help="Unlocks advanced tuning controls across all tabs")
     st.markdown("""
-    <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <span style="background:#E8F0FE;color:#174EA6;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;">v1.0</span>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+        <span style="background:#E8F0FE;color:#174EA6;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;">v2.0</span>
         <span style="background:#E6F4EA;color:#137333;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;">Multi-Cloud</span>
         <span style="background:#FEF7E0;color:#B06000;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;">NVIDIA GPU</span>
+        <span style="background:#F3E8FD;color:#6A0DAD;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;">27 Models</span>
     </div>""", unsafe_allow_html=True)
 
 
@@ -498,7 +525,7 @@ for (label, key), col in zip(
 with tb_pills:
     st.markdown("""
     <div style="display:flex;gap:6px;align-items:center;padding:14px 0;justify-content:flex-end">
-        <span style="background:#E8F0FE;color:#174EA6;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;">v1.0</span>
+        <span style="background:#E8F0FE;color:#174EA6;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;">v2.0</span>
         <span style="background:#E6F4EA;color:#137333;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;">Multi-Cloud</span>
     </div>""", unsafe_allow_html=True)
 
@@ -508,12 +535,15 @@ content_area = st.empty()
 # ════════════════════════════════════════════════════════════════════════════
 # 6 CALCULATOR TABS  (original set, unchanged)
 # ════════════════════════════════════════════════════════════════════════════
-tab_dashboard, tab_cost, tab_scenario, tab_gpu, tab_roi, tab_export = st.tabs([
+tab_dashboard, tab_cost, tab_scenario, tab_gpu, tab_roi, tab_tokenomics, tab_compare, tab_governance, tab_export = st.tabs([
     "📊 Executive Dashboard",
     "💰 Cost Components",
     "🔄 Scenario Comparison",
     "🖥️ GPU Optimization",
     "📈 ROI & Payback",
+    "🔬 Tokenomics",
+    "🏆 Model Comparison",
+    "🔒 Governance & Security",
     "📋 Docs & Export",
 ])
 
@@ -563,13 +593,22 @@ with tab_cost:
     with cb:
         if model_approach == "API / Third-party LLM":
             p = LLM_API_PRICING.get(selected_model, {})
-            st.table(pd.DataFrame([
+            _model_attrs = [
                 ("Provider",       p.get("provider","—")),
                 ("Input price",    f"${p.get('input_per_1m',0):.2f} / 1M tokens"),
                 ("Output price",   f"${p.get('output_per_1m',0):.2f} / 1M tokens"),
                 ("Context window", f"{p.get('context_window_k','?')}K tokens"),
                 ("Quality score",  f"{p.get('quality_score','?')} / 10"),
-            ], columns=["Attribute","Value"]).set_index("Attribute"))
+            ]
+            if expert_mode:
+                _model_attrs += [
+                    ("Latency P50",      f"{p.get('latency_ms_p50','—')} ms"),
+                    ("Enterprise Fit",   f"{p.get('enterprise_fit_score','—')} / 10"),
+                    ("Vision support",   "✅ Yes" if p.get("supports_vision") else "❌ No"),
+                    ("Batch API",        "✅ Yes" if p.get("supports_batch")  else "❌ No"),
+                    ("Batch discount",   f"{p.get('batch_discount_pct',0)}%"),
+                ]
+            st.table(pd.DataFrame(_model_attrs, columns=["Attribute","Value"]).set_index("Attribute"))
 
     sub_hdr("Data Pipeline")
     d1, d2, d3 = st.columns(3)
@@ -1516,6 +1555,320 @@ with tab_roi:
 
 
 # ────────────────────────────────────────────────────────────────────────────
+# CALCULATOR TAB 7 — Tokenomics Deep-Dive
+# ────────────────────────────────────────────────────────────────────────────
+with tab_tokenomics:
+    section("Tokenomics Deep-Dive",
+            "Analyze token economics, optimize prompt efficiency, and project costs across all models.")
+
+    total_input_m  = monthly_queries * avg_input_tokens  / 1_000_000
+    total_output_m = monthly_queries * avg_output_tokens / 1_000_000
+    total_tokens_m = total_input_m + total_output_m
+
+    sub_hdr("Monthly Token Volume")
+    tm1, tm2, tm3, tm4 = st.columns(4)
+    tm1.metric("Monthly Queries",    f"{monthly_queries:,}")
+    tm2.metric("Input Tokens / Mo",  f"{total_input_m:.2f}M")
+    tm3.metric("Output Tokens / Mo", f"{total_output_m:.2f}M")
+    tm4.metric("Total Tokens / Mo",  f"{total_tokens_m:.2f}M")
+
+    col_pie, col_bar = st.columns([1, 2])
+    with col_pie:
+        fig_io = go.Figure(go.Pie(
+            labels=["Input Tokens", "Output Tokens"],
+            values=[total_input_m, total_output_m],
+            hole=0.55,
+            marker=dict(colors=[GC["blue"], GC["green"]]),
+            textinfo="label+percent",
+        ))
+        fig_io.update_layout(**chart_layout(height=280, showlegend=False))
+        fig_io.update_layout(margin=dict(t=20, b=20, l=0, r=0))
+        st.plotly_chart(fig_io, use_container_width=True)
+    with col_bar:
+        _tok_rows = []
+        for _mn, _mp in LLM_API_PRICING.items():
+            _mc = total_input_m * _mp["input_per_1m"] + total_output_m * _mp["output_per_1m"]
+            _tok_rows.append({"Model": _mn, "Provider": _mp["provider"], "Monthly Cost ($)": round(_mc, 2)})
+        _df_tok = pd.DataFrame(_tok_rows).sort_values("Monthly Cost ($)")
+        _color_map = {"OpenAI": GC["blue"], "Anthropic": GC["purple"], "Google": GC["green"]}
+        fig_tok_bar = px.bar(
+            _df_tok, x="Monthly Cost ($)", y="Model", orientation="h",
+            color="Provider", color_discrete_map=_color_map,
+            text=_df_tok["Monthly Cost ($)"].apply(fmt),
+        )
+        fig_tok_bar.update_layout(**chart_layout(height=420, xaxis_title="Monthly Cost (USD)", yaxis_title=""))
+        fig_tok_bar.update_traces(textposition="outside", textfont_size=10)
+        st.plotly_chart(fig_tok_bar, use_container_width=True)
+
+    sub_hdr("Token Optimization Levers")
+    oc1, oc2, oc3 = st.columns(3)
+    with oc1:
+        cache_hit_pct   = st.slider("Semantic Cache Hit Rate %",  0, 60, 25, key="tok_cache",
+                                     help="% of queries answered from cache — avoids API call entirely")
+    with oc2:
+        compression_pct = st.slider("Prompt Compression %",       0, 50, 20, key="tok_compress",
+                                     help="Reduce input tokens via concise prompts / whitespace removal")
+    with oc3:
+        batch_share_pct = st.slider("Batch API Share %",          0, 100, 30, key="tok_batch",
+                                     help="% of queries sent via async batch API (50% cheaper)")
+
+    _base_tc   = model_api_cost if model_approach == "API / Third-party LLM" else 0
+    _cache_sv  = _base_tc * cache_hit_pct / 100
+    _remain    = _base_tc * (1 - cache_hit_pct / 100)
+    _comp_sv   = _remain * compression_pct / 100
+    _batch_sv  = _remain * batch_share_pct / 100 * 0.50
+    _total_sv  = _cache_sv + _comp_sv + _batch_sv
+    _opt_cost  = max(0, _base_tc - _total_sv)
+
+    ov1, ov2, ov3, ov4 = st.columns(4)
+    ov1.metric("Cache Savings / Mo",    fmt(_cache_sv))
+    ov2.metric("Compression Savings",   fmt(_comp_sv))
+    ov3.metric("Batch API Savings",     fmt(_batch_sv))
+    ov4.metric("Total Savings / Mo",    fmt(_total_sv),
+               delta=f"-{_total_sv/_base_tc*100:.1f}%" if _base_tc > 0 else "N/A")
+
+    if _base_tc > 0 and _total_sv > 0:
+        rec("💡", "Optimization Potential",
+            f"Applying all three levers reduces your token cost from **{fmt(_base_tc)}** → "
+            f"**{fmt(_opt_cost)}/month**, saving **{fmt(_total_sv*12)}/year**.",
+            GC["green"])
+
+    sub_hdr("12-Month Token Cost Projection")
+    tok_growth = st.slider("Monthly Query Growth %", 0, 20, 5, key="tok_growth")
+    _months    = list(range(1, 13))
+    _base_proj = [_base_tc  * (1 + tok_growth / 100) ** i for i in range(12)]
+    _opt_proj  = [_opt_cost * (1 + tok_growth / 100) ** i for i in range(12)]
+    fig_proj = go.Figure()
+    fig_proj.add_trace(go.Scatter(x=_months, y=_base_proj, name="Without Optimization",
+                                   line=dict(color=GC["red"], width=2)))
+    fig_proj.add_trace(go.Scatter(x=_months, y=_opt_proj,  name="With Optimization",
+                                   line=dict(color=GC["green"], width=2),
+                                   fill="tonexty", fillcolor="rgba(52,168,83,0.10)"))
+    fig_proj.update_layout(**chart_layout(height=320, xaxis_title="Month", yaxis_title="Token Cost (USD)"))
+    st.plotly_chart(fig_proj, use_container_width=True)
+
+    _annual_save = sum(_base_proj) - sum(_opt_proj)
+    if _annual_save > 0:
+        st.info(f"**Annual savings with optimization:** {fmt(_annual_save)} over 12 months at {tok_growth}% monthly growth.")
+
+    sub_hdr("Batch API Eligibility by Model")
+    _batch_rows = [{"Model": k, "Provider": v["provider"],
+                    "Supports Batch": "✅" if v.get("supports_batch") else "❌",
+                    "Batch Discount": f"{v.get('batch_discount_pct', 0)}%",
+                    "Batch Cost / Mo": fmt((total_input_m * v["input_per_1m"] + total_output_m * v["output_per_1m"])
+                                          * (1 - v.get("batch_discount_pct", 0) / 100))
+                    if v.get("supports_batch") else "—"}
+                   for k, v in LLM_API_PRICING.items()]
+    st.dataframe(pd.DataFrame(_batch_rows), use_container_width=True, hide_index=True)
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# CALCULATOR TAB 8 — Model Comparison Matrix
+# ────────────────────────────────────────────────────────────────────────────
+with tab_compare:
+    section("Model Comparison Matrix",
+            "Side-by-side comparison of all 27 models on cost, quality, speed, context, and capabilities.")
+
+    _all_providers = sorted({v["provider"] for v in LLM_API_PRICING.values()})
+    _sel_providers = st.multiselect("Filter by Provider", _all_providers, default=_all_providers, key="cmp_prov")
+
+    _cmp_rows = []
+    for _mn, _mp in LLM_API_PRICING.items():
+        if _mp["provider"] not in _sel_providers:
+            continue
+        _mo_cost = total_input_m * _mp["input_per_1m"] + total_output_m * _mp["output_per_1m"]
+        _cmp_rows.append({
+            "Model":              _mn,
+            "Provider":           _mp["provider"],
+            "Input $/1M":         _mp["input_per_1m"],
+            "Output $/1M":        _mp["output_per_1m"],
+            "Monthly Cost":       round(_mo_cost, 2),
+            "Context (K)":        _mp["context_window_k"],
+            "Quality":            _mp["quality_score"],
+            "Latency P50 (ms)":   _mp.get("latency_ms_p50", "—"),
+            "Ent. Fit":           _mp.get("enterprise_fit_score", "—"),
+            "Vision":             "✅" if _mp.get("supports_vision") else "❌",
+            "Batch":              "✅" if _mp.get("supports_batch")  else "❌",
+        })
+    _df_cmp = pd.DataFrame(_cmp_rows)
+
+    sort_col = st.selectbox("Sort by", ["Monthly Cost","Quality","Latency P50 (ms)","Ent. Fit","Input $/1M"], key="cmp_sort")
+    _df_cmp_sorted = _df_cmp.sort_values(sort_col)
+    st.dataframe(_df_cmp_sorted, use_container_width=True, hide_index=True)
+
+    st.markdown("---")
+    col_scat, col_radar = st.columns(2)
+
+    with col_scat:
+        sub_hdr("Cost vs Quality")
+        _color_map2 = {"OpenAI": GC["blue"], "Anthropic": GC["purple"], "Google": GC["green"]}
+        fig_scat = px.scatter(
+            _df_cmp, x="Monthly Cost", y="Quality", color="Provider",
+            color_discrete_map=_color_map2, text="Model", size_max=14,
+            hover_data=["Input $/1M","Output $/1M","Context (K)","Latency P50 (ms)"],
+        )
+        fig_scat.update_traces(textposition="top center", textfont_size=9)
+        fig_scat.update_layout(**chart_layout(height=380, xaxis_title="Monthly Cost (USD)", yaxis_title="Quality Score (1-10)"))
+        st.plotly_chart(fig_scat, use_container_width=True)
+
+    with col_radar:
+        sub_hdr("Radar — Select Models")
+        _radar_opts = list(_df_cmp["Model"])
+        _radar_sel  = st.multiselect("Models to compare", _radar_opts,
+                                      default=_radar_opts[:4], max_selections=6, key="cmp_radar")
+        if _radar_sel:
+            _radar_cats = ["Quality", "Ent. Fit", "Vision Score", "Batch Score", "Speed Score", "Value Score"]
+            fig_radar = go.Figure()
+            for _rm in _radar_sel:
+                _rd = _df_cmp[_df_cmp["Model"] == _rm].iloc[0]
+                _max_cost = _df_cmp["Monthly Cost"].max() or 1
+                _max_lat  = max(v.get("latency_ms_p50", 1) for v in LLM_API_PRICING.values()) or 1
+                _vals = [
+                    _rd["Quality"],
+                    _rd["Ent. Fit"] if isinstance(_rd["Ent. Fit"], (int, float)) else 5,
+                    10 if _rd["Vision"] == "✅" else 0,
+                    10 if _rd["Batch"]  == "✅" else 0,
+                    round(10 * (1 - LLM_API_PRICING[_rm].get("latency_ms_p50", _max_lat) / _max_lat), 1),
+                    round(10 * (1 - _rd["Monthly Cost"] / _max_cost), 1),
+                ]
+                fig_radar.add_trace(go.Scatterpolar(
+                    r=_vals + [_vals[0]], theta=_radar_cats + [_radar_cats[0]],
+                    fill="toself", name=_rm, opacity=0.7,
+                ))
+            fig_radar.update_layout(**chart_layout(height=380, showlegend=True))
+            fig_radar.update_layout(polar=dict(radialaxis=dict(range=[0, 10], gridcolor=GC["border"])))
+            st.plotly_chart(fig_radar, use_container_width=True)
+
+    sub_hdr("Best Model by Use-Case")
+    _uc_recs = {
+        "Customer Support (high volume, low cost)": ("GPT-4o mini",    "Gemini 2.0 Flash",   "Claude 3.5 Haiku"),
+        "Complex Reasoning / Agentic":              ("Claude Opus 4.8", "o3",                 "Claude Opus 4.6"),
+        "Long Document Processing":                 ("Gemini 2.5 Pro",  "Claude Opus 4.8",    "GPT-4.1"),
+        "Code Generation":                          ("Claude Sonnet 4.6","GPT-4.1",           "o4-mini"),
+        "Cost-Sensitive / High Volume":             ("Gemini 2.0 Flash Lite","GPT-4.1 nano",  "Claude Haiku 4.5"),
+        "Enterprise / Regulated Industry":          ("Claude Opus 4.8", "Claude Sonnet 4.6",  "GPT-4.1"),
+    }
+    _uc_rows = [{"Use Case": uc, "🥇 Top Pick": p[0], "🥈 Runner-up": p[1], "🥉 Budget Option": p[2]}
+                for uc, p in _uc_recs.items()]
+    st.dataframe(pd.DataFrame(_uc_rows), use_container_width=True, hide_index=True)
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# CALCULATOR TAB 9 — Governance & Security Costs
+# ────────────────────────────────────────────────────────────────────────────
+with tab_governance:
+    section("Governance & Security Costs",
+            "Estimate compliance, data sovereignty, audit, and security overhead for enterprise GenAI deployment.")
+
+    sub_hdr("Compliance Frameworks")
+    gc1, gc2 = st.columns(2)
+    with gc1:
+        frameworks = st.multiselect("Active Compliance Frameworks",
+            ["SOC 2 Type II","HIPAA","GDPR","ISO 27001","FedRAMP Moderate","PCI DSS","CCPA","NIST AI RMF"],
+            default=["SOC 2 Type II","GDPR"], key="gov_frameworks")
+        _framework_costs = {"SOC 2 Type II": 3500, "HIPAA": 4000, "GDPR": 3000,
+                            "ISO 27001": 4500, "FedRAMP Moderate": 12000, "PCI DSS": 5000,
+                            "CCPA": 2000, "NIST AI RMF": 1500}
+        _compliance_cost = sum(_framework_costs.get(f, 0) for f in frameworks)
+    with gc2:
+        data_residency = st.selectbox("Data Residency Requirement",
+            ["No restriction","Single region","Country-specific","On-premises only"], key="gov_residency")
+        _residency_premium = {"No restriction": 0, "Single region": 800,
+                               "Country-specific": 2500, "On-premises only": 8000}
+        _residency_cost = _residency_premium[data_residency]
+        st.info(f"Residency overhead: **{fmt(_residency_cost)}/month**")
+
+    sub_hdr("Security Controls")
+    sc1, sc2, sc3 = st.columns(3)
+    with sc1:
+        private_endpoints = st.checkbox("Private Endpoints / VPC", value=True, key="gov_vpc")
+        _vpc_cost = 450 if private_endpoints else 0
+        dlp_scanning = st.checkbox("DLP / PII Scanning", value=True, key="gov_dlp")
+        _dlp_cost = 0.002 * monthly_queries if dlp_scanning else 0
+    with sc2:
+        audit_logging = st.checkbox("Full Audit Logging", value=True, key="gov_audit")
+        _audit_storage_gb = monthly_queries * 0.0005
+        _audit_cost = _audit_storage_gb * 0.023 if audit_logging else 0
+        waf_enabled = st.checkbox("WAF / API Gateway", value=False, key="gov_waf")
+        _waf_cost = 300 if waf_enabled else 0
+    with sc3:
+        encryption_kms = st.checkbox("Customer-managed Encryption (KMS)", value=True, key="gov_kms")
+        _kms_cost = 150 if encryption_kms else 0
+        siem_enabled = st.checkbox("SIEM Integration", value=False, key="gov_siem")
+        _siem_cost = 800 if siem_enabled else 0
+
+    sub_hdr("AI Governance & Risk")
+    ag1, ag2 = st.columns(2)
+    with ag1:
+        model_risk_tier = st.selectbox("Model Risk Classification",
+            ["Low (internal tools)","Medium (customer-facing)","High (financial/medical decisions)","Critical (autonomous actions)"],
+            key="gov_risk")
+        _risk_costs = {"Low (internal tools)": 500, "Medium (customer-facing)": 1500,
+                       "High (financial/medical decisions)": 4000, "Critical (autonomous actions)": 8000}
+        _risk_cost = _risk_costs[model_risk_tier]
+    with ag2:
+        red_team_freq = st.selectbox("Red-team / Adversarial Testing Frequency",
+            ["Never","Annually","Quarterly","Monthly"], key="gov_redteam")
+        _redteam_annual = {"Never": 0, "Annually": 20000, "Quarterly": 60000, "Monthly": 180000}
+        _redteam_monthly = _redteam_annual[red_team_freq] / 12
+
+    sub_hdr("Security Team Overhead")
+    gt1, gt2 = st.columns(2)
+    with gt1:
+        sec_fte = st.number_input("Security / Compliance FTEs", 0, 20, 1, key="gov_fte")
+        _sec_labor = sec_fte * (145000 / 12)
+    with gt2:
+        sec_tools_mo = st.number_input("Security Tooling Budget ($/mo)", 0, 50000, 2000, step=500, key="gov_tools")
+
+    _total_gov = (_compliance_cost + _residency_cost + _vpc_cost + _dlp_cost +
+                  _audit_cost + _waf_cost + _kms_cost + _siem_cost +
+                  _risk_cost + _redteam_monthly + _sec_labor + sec_tools_mo)
+
+    sub_hdr("Governance Cost Summary")
+    gv1, gv2, gv3, gv4 = st.columns(4)
+    gv1.metric("Compliance & Residency", fmt(_compliance_cost + _residency_cost))
+    gv2.metric("Security Controls",      fmt(_vpc_cost + _dlp_cost + _audit_cost + _waf_cost + _kms_cost + _siem_cost))
+    gv3.metric("AI Risk & Red-team",     fmt(_risk_cost + _redteam_monthly))
+    gv4.metric("Total Governance / Mo",  fmt(_total_gov))
+
+    _gov_breakdown = {
+        "Compliance Frameworks": _compliance_cost,
+        "Data Residency":        _residency_cost,
+        "Private Endpoints":     _vpc_cost,
+        "DLP / PII Scanning":    _dlp_cost,
+        "Audit Logging":         _audit_cost,
+        "WAF / API Gateway":     _waf_cost,
+        "Encryption (KMS)":      _kms_cost,
+        "SIEM":                  _siem_cost,
+        "Model Risk Controls":   _risk_cost,
+        "Red-team Testing":      _redteam_monthly,
+        "Security FTEs":         _sec_labor,
+        "Security Tooling":      sec_tools_mo,
+    }
+    _gov_df = pd.DataFrame([{"Component": k, "Monthly Cost ($)": round(v, 2)}
+                             for k, v in _gov_breakdown.items() if v > 0])
+    fig_gov = px.bar(_gov_df, x="Monthly Cost ($)", y="Component", orientation="h",
+                     color="Monthly Cost ($)", color_continuous_scale=["#E8F0FE", GC["blue"]],
+                     text=_gov_df["Monthly Cost ($)"].apply(fmt))
+    fig_gov.update_layout(**chart_layout(height=380, xaxis_title="Monthly Cost (USD)", yaxis_title=""))
+    fig_gov.update_traces(textposition="outside")
+    st.plotly_chart(fig_gov, use_container_width=True)
+
+    _gov_pct = _total_gov / tco["monthly"] * 100 if tco["monthly"] > 0 else 0
+    rec("🔒", "Governance as % of TCO",
+        f"Governance & security overhead is **{fmt(_total_gov)}/month**, representing "
+        f"**{_gov_pct:.1f}%** of your total TCO (**{fmt(tco['monthly'])}/month**). "
+        f"Annual governance cost: **{fmt(_total_gov * 12)}**.",
+        GC["purple"] if _gov_pct > 20 else GC["blue"])
+
+    if _gov_pct > 25:
+        rec("⚠️", "High Governance Overhead",
+            "Your governance spend exceeds 25% of TCO. Consider consolidating compliance frameworks, "
+            "automating audit logging, and using a managed security provider to reduce overhead.",
+            GC["yellow"])
+
+
+# ────────────────────────────────────────────────────────────────────────────
 # CALCULATOR TAB 6 — Docs & Export
 # ────────────────────────────────────────────────────────────────────────────
 with tab_export:
@@ -1560,11 +1913,16 @@ IRR         = Bisection solve where NPV = 0
             "Memory GB": v["memory_gb"], "BF16 TFLOPS": v["flops_bf16_tflops"],
         } for k, v in GPU_PRICING.items()]), use_container_width=True, hide_index=True)
 
-        st.markdown("#### LLM API Pricing")
+        st.markdown("#### LLM API Pricing (v2.0 — 27 Models)")
         st.dataframe(pd.DataFrame([{
             "Model": k, "Provider": v["provider"],
             "Input $/1M": v["input_per_1m"], "Output $/1M": v["output_per_1m"],
-            "Context Window": f"{v['context_window_k']}K", "Quality": v["quality_score"],
+            "Context (K)": v["context_window_k"], "Quality": v["quality_score"],
+            "Latency P50": f"{v.get('latency_ms_p50','—')}ms",
+            "Ent. Fit": v.get("enterprise_fit_score","—"),
+            "Vision": "✅" if v.get("supports_vision") else "❌",
+            "Batch": "✅" if v.get("supports_batch") else "❌",
+            "Batch Disc.": f"{v.get('batch_discount_pct',0)}%",
         } for k, v in LLM_API_PRICING.items()]), use_container_width=True, hide_index=True)
 
     with st.expander("🏗️ Architecture Notes"):
@@ -1600,10 +1958,54 @@ IRR         = Bisection solve where NPV = 0
         df_exp = pd.DataFrame([export]).T.reset_index()
         df_exp.columns = ["Metric","Value"]
         st.dataframe(df_exp, use_container_width=True, hide_index=True)
-        c_dl1, c_dl2 = st.columns(2)
+        c_dl1, c_dl2, c_dl3 = st.columns(3)
         with c_dl1:
             st.download_button("⬇️  Download as CSV",
                 df_exp.to_csv(index=False),
-                f"genai_tco_{company_name.replace(' ','_')}.csv", "text/csv")
+                f"genai_tco_{company_name.replace(' ','_')}.csv", "text/csv",
+                use_container_width=True)
         with c_dl2:
-            st.button("📄  Export PDF Report")
+            import json as _json
+            _full_report = {
+                "report": "GenAI TCO & ROI — AI CostLens v2.0",
+                "generated": "2026-07-09",
+                "company": company_name,
+                "industry": industry,
+                "use_case": use_case,
+                "inputs": {
+                    "monthly_queries": monthly_queries,
+                    "avg_input_tokens": avg_input_tokens,
+                    "avg_output_tokens": avg_output_tokens,
+                    "cloud_provider": cloud_provider,
+                    "deployment_type": deployment_type,
+                    "model_approach": model_approach,
+                },
+                "tco": {
+                    "monthly": round(tco["monthly"], 2),
+                    "annual": round(tco["annual"], 2),
+                    "three_year": round(tco["three_year"], 2),
+                    "breakdown": {k: round(v, 2) for k, v in tco["breakdown"].items()},
+                },
+                "roi": {
+                    "monthly_benefits": round(roi_result["monthly_benefits"], 2),
+                    "payback_months": round(roi_result["payback_months"], 1)
+                        if roi_result["payback_months"] != float("inf") else None,
+                    "npv": round(roi_result["npv"], 2),
+                    "irr_pct": round(roi_result.get("irr_pct", 0), 2),
+                },
+            }
+            st.download_button("📄  Download as JSON",
+                _json.dumps(_full_report, indent=2),
+                f"genai_tco_{company_name.replace(' ','_')}.json", "application/json",
+                use_container_width=True)
+        with c_dl3:
+            _md_lines = [
+                f"# GenAI TCO Report — {company_name}",
+                f"**Generated:** 2026-07-09  |  **Tool:** AI CostLens v2.0",
+                "", "## Summary",
+                f"| Metric | Value |", f"|---|---|",
+            ] + [f"| {row['Metric']} | {row['Value']} |" for _, row in df_exp.iterrows()]
+            st.download_button("📝  Download as Markdown",
+                "\n".join(_md_lines),
+                f"genai_tco_{company_name.replace(' ','_')}.md", "text/markdown",
+                use_container_width=True)
