@@ -106,8 +106,6 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-App opens at `http://localhost:8501`.
-
 ---
 
 ## Project Structure
